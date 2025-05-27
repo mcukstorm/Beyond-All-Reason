@@ -1,0 +1,14 @@
+<template name="arc_progress_bar">
+	<head>
+		<link type="text/rcss" href="arc_progress_bar.rcss"/>
+    </head>
+    <body>
+		<div class="arc-progress-bar--label">%</div>
+		<div class="arc-progress-bar--center-logo"></div>
+		<div class="arc-progress-bar--indicator-inner" value="50"><div class="arc-progress-bar--indicator-marker"></div></div>
+		<div class="arc-progress-bar--indicator-outer" value="50"><div class="arc-progress-bar--indicator-marker"></div></div>
+		<div class="arc-progress-bar--mask">
+			<div class="arc-progress-bar--inner"></div>
+		</div>
+	</body>
+</template>

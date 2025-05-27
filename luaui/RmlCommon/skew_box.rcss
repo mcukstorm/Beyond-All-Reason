@@ -1,0 +1,152 @@
+/** 
+    ELEMENTS/Example Usage (not using the rml template):
+    <div class="skew alert-critical skew-r skew-clip-l">
+        <div class="skew-clip-box"><div class="skew-box"><div class="inset-shadow"></div></div></div>
+        <div class="skew-drop-label">ALERT!</div>
+        Content
+    </div>
+
+    CLASSES:
+    Containers MUST include the "skew" class
+    
+    Default behaviour skews the box to the left, to reverse this apply "skew-r" class to the container
+    
+    To clip one side off a box you can use the "skew-clip-l" or "skew-clip-r" classes on the container
+    
+    To highlight the box use "alert-warn" (yellow by default) or "alert-critical" (red by default) on the container
+    
+    Drop labels can be added by including an element within the container with a class of "skew-drop-label" 
+        or "skew-drop-label-r" if you want it to the right of the box
+
+    NOTES:
+    If you want to create boxes of different heights you will need to copy the 4 lines of css below and adapt them
+        preferably adding an additional class name to them to match what you are doing.
+*/
+
+/** Sizing (you may want to override/create deriviatives of this, keep same 10dp differences between values) */
+.skew { height: 60dp; margin-left: 70dp; margin-right: 70dp; }
+.skew-clip-box { left: -60dp; }
+.skew-clip-l .skew-clip-box { right: -60dp; }
+.skew-clip-l .skew-box { left: -70dp; right: 60dp; }
+
+/** Generic skew box */
+.skew {
+    position: relative;
+    padding: 5dp 0 10dp 0;
+}
+
+.skew-clip-box {
+    position: absolute; 
+    z-index: -1;
+    top: 0; 
+    bottom: 0; 
+    right: 0;
+}
+.skew-clip-r .skew-clip-box, .skew-clip-l .skew-clip-box {
+    clip: always;
+}
+
+.skew-clip-l .skew-clip-box { 
+    left: 0; 
+    }
+
+.skew-box {
+    position: absolute; 
+    z-index: -1; /* Z-Index repeated here in case the clip box is omitted */
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 10dp; /* Allow space for bottom shadow to be within clipbox */
+    transform: skewX(45deg);
+
+    background-color: rgba(7%, 7%, 7%, 50%);
+    box-shadow: rgba(13%, 13%, 13%, 50%) -10dp 10dp 0 0;
+
+    border: 2dp #575757;
+    border-radius: 5dp;
+}
+
+.skew-r .skew-box {
+    transform: skewX(-45deg);
+    box-shadow: rgba(13%, 13%, 13%, 50%) 10dp 10dp 0 0;
+}
+
+.skew-l .skew-box, {
+    transform-origin: left top 0;
+}
+.skew-r .skew-box, {
+    transform-origin: left bottom 0;
+}
+
+/** Container Kerning */
+.skew.skew-clip-r { margin-right: 0; }
+.skew.skew-clip-l { margin-left: 0; }
+.skew.skew-l + .skew.skew-l { margin-left: 0; }
+.skew.skew-r + .skew.skew-r { margin-left: 0; }
+
+/** Inner shadow/glow for Skew Elements */
+.skew-box .inset-shadow {
+    width: 100%; 
+    height: 100%;
+    box-shadow: rgba(0,0,0,50%) 5dp 10dp 30dp 10dp inset;
+    transform: rotateZ(180deg);
+}
+
+/* Critical status glow */
+.alert-critical .skew-box {
+    box-shadow: rgba(230, 0, 0, 40%) -10dp 10dp 0 0;
+}
+.skew-r.alert-critical .skew-box {
+    box-shadow: rgba(230, 0, 0, 40%) 10dp 10dp 0 0;
+}
+.alert-critical .skew-box .inset-shadow {
+    box-shadow: rgba(255, 20, 20, 50%) -10dp 10dp 30dp 15dp inset;
+}
+.skew-r.alert-critical .skew-box .inset-shadow {
+    box-shadow: rgba(255, 20, 20, 50%) 5dp 10dp 30dp 15dp inset;
+}
+
+/** Warn status glow */
+.alert-warn .skew-box {
+    box-shadow: rgba(255, 230, 0, 40%) -10dp 10dp 0 0;
+}
+.skew-r.alert-warn .skew-box {
+    box-shadow: rgba(255, 230, 0, 40%) 10dp 10dp 0 0;
+}
+.alert-warn .skew-box .inset-shadow {
+    box-shadow: rgba(255, 230, 0, 50%) -10dp 10dp 30dp 15dp inset;
+}
+.skew-r.alert-warn .skew-box .inset-shadow {
+    box-shadow: rgba(255, 230, 0, 50%) 5dp 10dp 30dp 15dp inset;
+}
+
+/** Drop labels underneath */
+.skew .skew-drop-label-right,
+.skew .skew-drop-label {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 20dp;
+    margin-top: -10dp;
+    background-color: #c51c1c;
+    color: #fff;
+    border: 2dp #570404;
+    border-radius: 0 0 5dp 5dp;
+    border-top: 0;
+    padding: 2dp 5dp 5dp 5dp;
+    font-effect: glow(1dp 2dp 0 0 #000);
+}
+.skew .skew-drop-label-right {
+    right: 10dp; 
+    left: auto;
+}
+.skew.alert-warn .skew-drop-label-right,
+.skew.alert-warn .skew-drop-label {
+    background-color: #ce9500;
+    border-color: #6c4800;
+}
+
+.skew .skew-drop-label-right.show,
+.skew .skew-drop-label.show {
+    display: block;
+} 

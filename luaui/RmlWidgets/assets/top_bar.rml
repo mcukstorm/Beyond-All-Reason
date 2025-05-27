@@ -1,0 +1,65 @@
+<rml>
+
+	<head>
+		<title>Top Bar</title>
+		<link type="text/rcss" href="/luaui/RmlCommon/default_styles.rcss" />
+		<link type="text/template" href="/luaui/RmlCommon/skew_box.rml" />
+		<link type="text/template" href="/luaui/RmlCommon/arc_progress_bar.rml" />
+		<style>
+			body { width: 100%; margin-top: 200dp; }
+
+			.top-bar { display: flex; }
+			.flex-spacer { flex-grow: 4; flex-shrink: -1; }
+			.top-bar > div { 
+				display: inline-block; 
+				font-effect: glow(2dp 6dp 0 0 #000);
+			}
+
+			/* Skew Box Adaptions (set height) For Top Bar */
+			.skew-height-2 { min-width: 400dp; height: 100dp; margin-left: 110dp; margin-right: 110dp; }
+			.skew-height-2.skew-clip-box { left: -100dp; right: -100dp; }
+			.skew-height-2.skew-clip-l .skew-clip-box { right: -100dp; }
+			.skew-height-2.skew-clip-l .skew-box { left: -110dp; right: 100dp; }
+
+			.top-bar .build-power-box {
+				padding: 10dp;
+				border: 1dp #3d3d3d;
+				background-color: rgba(7%, 7%, 7%, 50%);
+				
+				box-shadow: rgba(13%, 13%, 13%, 50%) 0 10dp 0, 
+							rgba(0,0,0,50%) 5dp 10dp 30dp 10dp inset;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="top-bar">
+			<div class="flex-spacer"></div>
+			<div class="skew skew-l skew-height-1 alert-critical">
+				<template src="skew_box" />Recycle
+			</div>
+			<div class="skew alert-critical skew-l skew-clip-r skew-height-2" id="metal-container">
+				<template src="skew_box" />
+				skew-left<br/>skew-clip-right
+				<!--
+					Would be nice to include the label in the template but you can't use the content attribute when including a template more than once
+					 if using the LUA helper class you don't need to create it here anyway.
+				-->
+				<div class="skew-drop-label show">WASTING METAL</div>
+			</div>
+			<div class="build-power-box">
+				<div class="arc-progress-bar offset" id="buildpower-progressbar" value="67">
+					<template src="arc_progress_bar" />
+				</div>
+			</div>
+			<div class="skew alert-warn skew-r skew-clip-l skew-height-2" id="energy-container">
+				<template src="skew_box" />
+				skew-right<br/>skew-clip-left
+			</div>
+			<div class="skew skew-r skew-height-1">
+				<template src="skew_box" />Wind - tidal
+			</div>
+			<div class="flex-spacer"></div>
+		</div>
+	</body>
+</rml>

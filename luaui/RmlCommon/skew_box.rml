@@ -1,0 +1,8 @@
+<template name="skew_box">
+	<head>
+		<link type="text/rcss" href="skew_box.rcss"/>
+    </head>
+    <body>
+		<div class="skew-clip-box"><div class="skew-box"><div class="inset-shadow"></div></div></div>
+	</body>
+</template>
