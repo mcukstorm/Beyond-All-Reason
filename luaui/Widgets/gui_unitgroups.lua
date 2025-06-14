@@ -120,9 +120,9 @@ function widget:ViewResize()
 	usedHeight = groupSize + (posY-height > 0 and backgroundPadding or 0)
 
 	if uiTex then
-		gl.DeleteTextureFBO(uiBgTex)
+		gl.DeleteTexture(uiBgTex)
 		uiBgTex = nil
-		gl.DeleteTextureFBO(uiTex)
+		gl.DeleteTexture(uiTex)
 		uiTex = nil
 	end
 end
@@ -136,6 +136,10 @@ function widget:PlayerChanged(playerID)
 end
 
 function widget:Initialize()
+	if not showWhenSpec and spec then
+		widgetHandler:RemoveWidget()
+		return
+	end
 	widget:ViewResize()
 	widget:PlayerChanged()
 	WG['unitgroups'] = {}
@@ -149,10 +153,10 @@ function widget:Shutdown()
 		gl.DeleteList(dlist)
 	end
 	if uiBgTex then
-		gl.DeleteTextureFBO(uiBgTex)
+		gl.DeleteTexture(uiBgTex)
 	end
 	if uiTex then
-		gl.DeleteTextureFBO(uiTex)
+		gl.DeleteTexture(uiTex)
 	end
 	if WG['guishader'] and dlistGuishader then
 		WG['guishader'].DeleteDlist('unitgroups')
@@ -434,7 +438,7 @@ local function updateList()
 		if usedWidth > uiTexWidth then
 			uiTexWidth = usedWidth
 			if uiTex then
-				gl.DeleteTextureFBO(uiTex)
+				gl.DeleteTexture(uiTex)
 				uiTex = nil
 			end
 		end
@@ -446,9 +450,12 @@ local function updateList()
 			floor(posX * vsx) + usedWidth,
 			floor(posY * vsy) + usedHeight
 		}
-		if uiBgTex and backgroundRect and backgroundRect[3] ~= prevBackgroundX2 then
-			gl.DeleteTextureFBO(uiBgTex)
-			uiBgTex = nil
+		if backgroundRect and backgroundRect[3] ~= prevBackgroundX2 then
+			if uiBgTex then
+				gl.DeleteTexture(uiBgTex)
+				uiBgTex = nil
+			end
+			checkGuishader(true)
 		end
 
 		if useRenderToTextureBg then
@@ -494,33 +501,33 @@ local function updateList()
 				drawContent()
 			end)
 		end
-
-		checkGuishader(true)
 	end
 end
 
 function widget:DrawScreen()
-	if doUpdate then
-		doUpdate = false
-		updateList()
-	end
-	if (not spec or showWhenSpec) and (dlist or uiBgTex) then
-		if uiBgTex then
-			-- background element
-			gl.Color(1,1,1,Spring.GetConfigFloat("ui_opacity", 0.7)*1.1)
-			gl.Texture(uiBgTex)
-			gl.TexRect(backgroundRect[1], backgroundRect[2], backgroundRect[3], backgroundRect[4], false, true)
-			gl.Texture(false)
+	if not spec or showWhenSpec then
+		if doUpdate then
+			doUpdate = false
+			updateList()
 		end
-		if not useRenderToTexture then
-			gl.CallList(dlist)
-		end
-		if uiTex then
-			-- content
-			gl.Color(1,1,1,1)
-			gl.Texture(uiTex)
-			gl.TexRect(backgroundRect[1], backgroundRect[2], backgroundRect[1]+uiTexWidth, backgroundRect[4], false, true)
-			gl.Texture(false)
+		if dlist or uiBgTex then
+			if uiBgTex then
+				-- background element
+				gl.Color(1,1,1,Spring.GetConfigFloat("ui_opacity", 0.7)*1.1)
+				gl.Texture(uiBgTex)
+				gl.TexRect(backgroundRect[1], backgroundRect[2], backgroundRect[3], backgroundRect[4], false, true)
+				gl.Texture(false)
+			end
+			if not useRenderToTexture then
+				gl.CallList(dlist)
+			end
+			if uiTex then
+				-- content
+				gl.Color(1,1,1,1)
+				gl.Texture(uiTex)
+				gl.TexRect(backgroundRect[1], backgroundRect[2], backgroundRect[1]+uiTexWidth, backgroundRect[4], false, true)
+				gl.Texture(false)
+			end
 		end
 	end
 end
